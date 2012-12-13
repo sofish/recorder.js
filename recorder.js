@@ -1,3 +1,4 @@
+/*! licensed under MIT, https://github.com/sofish */
 var Recorder = (function(R, win, doc) {
 
   // detect CaptureApi
@@ -58,7 +59,7 @@ var Recorder = (function(R, win, doc) {
    * @param video {DOM Element} the video element
    * @return Image {String: DataURL}
    */
-  R.snapshot = function(video, callback) {
+  R.snapshot = function(video) {
 
     if (!(video && video.videoHeight)) return;
 
