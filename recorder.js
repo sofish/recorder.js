@@ -6,12 +6,12 @@ var Recorder = (function(R, win, doc) {
 
   if(!R._api) return alert(':( Your device doesn\'t have native support of Caputure Api.');
 
-  /* capturing vedio|audio
+  /* play vedio|audio
    * @param el {DOM Element} video/audio element to capture the stream
    * @param type {String} media type, the value can be: 'video', 'audio', or 'both'
    * @param callback {Function} callback to run when the media's metadata is load
    */
-  R.capture = function(el, type, callback) {
+  R.play = function(el, type, callback) {
 
     // only capturing video/audio
     if(!(el && ['VIDEO', 'AUDIO'].indexOf(el.nodeName.toUpperCase()) !== -1)) return;
@@ -25,14 +25,14 @@ var Recorder = (function(R, win, doc) {
 
     // set the video source to the stream when success to connect
     success = function(stream) {
-      //var url = window.URL ? window.URL.createObjectURL(stream) : stream.createObjectURL(stream);
-      el.src = stream;
-      console.log(stream);
-
+      win.URL = win.URL || win.webkitURL;
+      el.src = win.URL ? win.URL.createObjectURL(stream) : stream;
       // render callback when the metadata of the video is loaded
-      video.onloadedmetadata = function(e) {
+
+      el.addEventListener('loadedmetadata', function(e) {
         callback && callback(e);
-      }
+        !el.autoplay && el.play();
+      }, false);
     }
 
     // decide what to capture
@@ -55,23 +55,22 @@ var Recorder = (function(R, win, doc) {
   }
 
   /* take picture
-   * @param stream {DOM Element} element of the media source
+   * @param video {DOM Element} the video element
    * @return Image {String: DataURL}
    */
-  R.snapshot = function(media, callback) {
+  R.snapshot = function(video, callback) {
 
-    if (!media) return;
+    if (!(video && video.videoHeight)) return;
 
     // using canvas to generate snapshot
     var canvas = doc.createElement('canvas')
       , ctx = canvas.getContext('2d');
 
-    canvas.height = media.videoHeight;
-    canvas.width = media.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.width = video.videoWidth;
 
-    ctx.drawImage(media, 0, 0);
-    // "image/webp" works in Chrome 18. In other browsers, this will fall back to image/png.
-    return canvas.toDataURL('image/webp');
+    ctx.drawImage(video, 0, 0);
+    return canvas.toDataURL('image/png');
   }
 
   return R;
