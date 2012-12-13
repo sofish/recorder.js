@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Capture video and audio using HTML5</title>
+  <link rel="stylesheet" href="../recorder.css" />
+  <style>
+    video{box-shadow:2px 1px 3px #ddd;display:block;}
+    button{display:none;}
+  </style>
+</head>
+<body>
+
+<video autoplay controls id="video" src=""></video>
+<button id="snapshot">snapshot</button>
+
+<script src="../recorder.js"></script>
+<script>
+~function(win, doc) {
+
+  var Util = {}, video, snapshot;
+
+  Util.get = function(selector, isList) {
+    return isList ? doc.querySelectorAll(selector) : doc.querySelector(selector);
+  }
+
+  video = Util.get('#video');
+  snapshot = Util.get('#snapshot');
+
+  video.addEventListener('click', function(){
+    Recorder.capture(this, 'both', function(e, stream) {
+      snapshot.style.display = 'block';
+    })
+  }, false);
+
+  snapshot.addEventListener('click', function() {
+    var imgSource = Recorder.snapshot(video)
+      , img = doc.createElement('img');
+
+    img.src = imgSource;
+    doc.body.appendChild(img);
+  }, false);
+
+}(window, document)
+
+</script>
+</body>
+</html>
