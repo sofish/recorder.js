@@ -59,7 +59,7 @@ var Recorder = (function(R, win, doc) {
    * @param video {DOM Element} the video element
    * @return Image {String: DataURL}
    */
-  R.snapshot = function(video) {
+  R.snapshot = function(video, type) {
 
     if (!(video && video.videoHeight)) return;
 
@@ -67,11 +67,48 @@ var Recorder = (function(R, win, doc) {
     var canvas = doc.createElement('canvas')
       , ctx = canvas.getContext('2d');
 
+    type = type || 'image/png';
+
     canvas.height = video.videoHeight;
     canvas.width = video.videoWidth;
 
     ctx.drawImage(video, 0, 0);
-    return canvas.toDataURL('image/png');
+    return canvas.toDataURL(type);
+  }
+
+  R.upload = function(url, data) {
+
+    // make sure url is a String, and, when data exists, it should be an Object
+    if((typeof url !== 'string') || (data && Object.prototype.toString.call(data) !== '[object Object]')) return;
+
+    data = data || {};
+
+    var formData = new FormData()
+      , xhr = new XMLHttpRequest()
+      , dataURItoBlob, file;
+
+    // http://stackoverflow.com/a/11954337
+    dataURItoBlob = function(dataURI) {
+      var binary = atob(dataURI.split(',')[1]);
+      var array = [];
+      for(var i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], {type: 'image/png'});
+    }
+
+    Object.keys(data).forEach(function(key) {
+
+      var value = data[key];
+
+      // data-uri to blob
+      if(value.slice(0, 10) === 'data:image') value = dataURItoBlob(value);
+
+      formData.append(key, value);
+    })
+
+    xhr.open('POST', '/test');
+    xhr.send(formData);
   }
 
   return R;

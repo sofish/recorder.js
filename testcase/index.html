@@ -6,17 +6,21 @@
   <link rel="stylesheet" href="../recorder.css" />
   <style>
     video{box-shadow:2px 1px 3px #ddd;display:block;}
+    img{display:block;margin:0 auto;}
+    #wrapper{width:300px;margin:10px auto 0;}
     #snapshot{display:none;}
   </style>
 </head>
 <body>
 
-<video controls id="video" src="" width="300"></video>
-<p>
-  <button id="play">play</button>
-  <button id="stop">stop</button>
-  <button id="snapshot">snapshot</button>
-</p>
+<div id="wrapper">
+    <video controls id="video" src="" width="300"></video>
+    <p>
+      <button id="play">play</button>
+      <button id="stop">stop</button>
+      <button id="snapshot">snapshot</button>
+    </p>
+</div>
 
 <script src="../recorder.js"></script>
 <script>
@@ -50,6 +54,12 @@
 
     img.src = imgSource;
     doc.body.appendChild(img);
+
+    Recorder.upload('/test', {
+        name: 'sofish',
+        file: imgSource
+    });
+
   }, false);
 
 }(window, document)
