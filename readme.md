@@ -41,12 +41,14 @@ Recorder.snapshot(video, [type]);
 
 Allow u to send snapshot to server
 
+```js
 /* upload to server
  * @param url {String} request url
  * @param data {Object} data to send
  * @param callback {Function} the first argument is the response
  */
-R.upload
+R.upload(url, data, [callback])
+```
 
 ### 3. Demo Code
 
