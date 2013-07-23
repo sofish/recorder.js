@@ -77,18 +77,25 @@ var Recorder = (function(R, win, doc) {
     return canvas.toDataURL(type);
   }
 
-  R.upload = function(url, data) {
+  /* upload to server
+   * @param url {String} request url
+   * @param data {Object} data to send
+   * @param callback {Function} the first argument is the response
+   */
+  R.upload = function(url, data, callback) {
 
     // make sure url is a String, and, when data exists, it should be an Object
     if((typeof url !== 'string') || (data && Object.prototype.toString.call(data) !== '[object Object]')) return;
 
     data = data || {};
+    callback = callback || function(){};
 
     var formData = new FormData()
       , xhr = new XMLHttpRequest()
       , dataURItoBlob;
 
-    // http://stackoverflow.com/a/11954337
+    // covert data-uri to blob
+    // copyright: http://stackoverflow.com/a/11954337
     dataURItoBlob = function(dataURI) {
       var binary = atob(dataURI.split(',')[1]);
       var array = [];
@@ -99,17 +106,24 @@ var Recorder = (function(R, win, doc) {
       return new Blob([new Uint8Array(array)], {
         type: dataURI.slice(5, dataURI.indexOf(';'))
       });
-    }
+    };
 
+    // send data with `FormData` format
     Object.keys(data).forEach(function(key) {
-
       var value = data[key];
 
       // data-uri to blob
       if(value.slice(0, 10) === 'data:image') value = dataURItoBlob(value);
-
       formData.append(key, value);
-    })
+    });
+
+    // listen and apply callback
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState === 4) {
+        callback.call(this, xhr.response);
+        xhr.onreadystatechange = null;
+      }
+    };
 
     xhr.open('POST', url);
     xhr.send(formData);
