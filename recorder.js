@@ -94,7 +94,10 @@ var Recorder = (function(R, win, doc) {
       for(var i = 0; i < binary.length; i++) {
         array.push(binary.charCodeAt(i));
       }
-      return new Blob([new Uint8Array(array)], {type: 'image/png'});
+
+      return new Blob([new Uint8Array(array)], {
+        type: dataURI.slice(5, dataURI.indexOf(';'))
+      });
     }
 
     Object.keys(data).forEach(function(key) {
