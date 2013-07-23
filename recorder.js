@@ -73,6 +73,7 @@ var Recorder = (function(R, win, doc) {
     canvas.width = video.videoWidth;
 
     ctx.drawImage(video, 0, 0);
+
     return canvas.toDataURL(type);
   }
 
@@ -85,7 +86,7 @@ var Recorder = (function(R, win, doc) {
 
     var formData = new FormData()
       , xhr = new XMLHttpRequest()
-      , dataURItoBlob, file;
+      , dataURItoBlob;
 
     // http://stackoverflow.com/a/11954337
     dataURItoBlob = function(dataURI) {
@@ -110,7 +111,7 @@ var Recorder = (function(R, win, doc) {
       formData.append(key, value);
     })
 
-    xhr.open('POST', '/test');
+    xhr.open('POST', url);
     xhr.send(formData);
   }
 
