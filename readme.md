@@ -26,15 +26,27 @@ Recorder.play(el, type, callback)
 
 #### 2.2 Take a snapshot
 
-Capture a snapshot of the current image of the media stream. a 'image/png' formatted DataURL string of the snapshot will be set as the return value.
+Capture a snapshot of the current image of the media stream. a DataURL string of the snapshot will be set as the return value.
 
 ```js
 /* take picture
  * @param video {DOM Element} the video element
- * @return Image {String: DataURL} 'image/png'
+ * @param type {String} specify a type, like 'image/png'
+ * @return Image {String: DataURL}
  */
-Recorder.snapshot(video);
+Recorder.snapshot(video, [type]);
 ```
+
+#### 2.3 Upload snapshot
+
+Allow u to send snapshot to server
+
+/* upload to server
+ * @param url {String} request url
+ * @param data {Object} data to send
+ * @param callback {Function} the first argument is the response
+ */
+R.upload
 
 ### 3. Demo Code
 
