@@ -2,6 +2,11 @@
 
 Using Capture API (HTML5) to capture video / photo via the camera of your device.
 
+```js
+// detect api support
+if(Recorder.isSupported) console.log('oh yeah!');
+```
+
 ### 1. Run the demo
 
 ```sh

@@ -5,7 +5,11 @@ var Recorder = (function(R, win, doc) {
   R._api = navigator.getUserMedia || navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia || navigator.msGetUserMedia;
 
-  if(!R._api) return alert(':( Your device doesn\'t have native support of Caputure Api.');
+
+  // support detect
+  R.isSupported = !!R._api;
+
+  if(!R.isSupported) return;
 
   /* play vedio|audio
    * @param el {DOM Element} video/audio element to capture the stream

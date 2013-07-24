@@ -26,6 +26,8 @@
 <script>
 ~function(win, doc) {
 
+  if(!Recorder.isSupported) return;
+
   var Util = {}, video, snapshot, play;
 
   Util.get = function(selector, isList) {
