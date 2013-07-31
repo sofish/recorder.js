@@ -61,6 +61,7 @@ var Recorder = (function(R, win, doc) {
 
   /* take picture
    * @param video {DOM Element} the video element
+   * @param type {String} 'image/jpeg' by default
    * @return Image {String: DataURL}
    */
   R.snapshot = function(video, type) {
@@ -71,7 +72,7 @@ var Recorder = (function(R, win, doc) {
     var canvas = doc.createElement('canvas')
       , ctx = canvas.getContext('2d');
 
-    type = type || 'image/png';
+    type = type || 'image/jpeg';
 
     canvas.height = video.videoHeight;
     canvas.width = video.videoWidth;
