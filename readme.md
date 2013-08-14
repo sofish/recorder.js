@@ -55,43 +55,21 @@ Allow u to send snapshot to server
 R.upload(url, data, [callback])
 ```
 
-### 3. Demo Code
+#### 2.4 Read files from input
+
+Allow u to read image files from `input[type="file"]`:
 
 ```js
-~function(win, doc) {
-
-  var Util = {}, video, snapshot, play;
-
-  Util.get = function(selector, isList) {
-    return isList ? doc.querySelectorAll(selector) : doc.querySelector(selector);
-  }
-
-  video = Util.get('#video');
-  snapshot = Util.get('#snapshot');
-  play = Util.get('#play');
-  stop = Util.get('#stop');
-
-  play.addEventListener('click', function(){
-    Recorder.play(video, 'both', function() {
-      snapshot.style.display = 'inline';
-    })
-  }, false);
-
-  stop.addEventListener('click', function() {
-    video.pause();
-    snapshot.style.display = 'none';
-  })
-
-  snapshot.addEventListener('click', function() {
-    var imgSource = Recorder.snapshot(video)
-      , img = doc.createElement('img');
-
-    img.src = imgSource;
-    doc.body.appendChild(img);
-  }, false);
-
-}(window, document)
+/* 读取 input[type=file] 选中的文件
+ * @param input {HTML Element} input[type=file]
+ * @returns {Array: Blob} 返回是文件的二进制形式 Blob
+ */
+R.read(input);
 ```
+
+### 3. Demo Code
+
+[testcase/index.html](https://github.com/sofish/recorder.js/blob/master/testcase/index.html)
 
 
 

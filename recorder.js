@@ -19,11 +19,9 @@ var Recorder = (function(R, win, doc) {
   R._api = navigator.getUserMedia || navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia || navigator.msGetUserMedia;
 
-
   // support detect
   R.isSupported = !!R._api;
 
-  if(!R.isSupported) return;
 
   /* play vedio|audio
    * @param el {DOM Element} video/audio element to capture the stream
@@ -75,16 +73,21 @@ var Recorder = (function(R, win, doc) {
 
   /* 读取 input[type=file] 选中的文件
    * @param input {HTML Element} input[type=file]
-   * @returns {Array} 返回是文件的二进制形式 Blob
+   * @returns {Array: Blob} 返回是文件的二进制形式 Blob
    */
   R.read = function(input) {
 
     var ret = []
       , files = input.files
+
+    // 文件类型
       , reg = /^image\/(jpeg|jpg|gif|png)$/
 
     for(var i = 0; i < files.length; i++) {
-      if(reg.test(files[i].type)) ret.push(files[i].slice());
+      var file = files[i]
+        , slice = file.slice ? 'slice' : 'webkitSlice';
+
+      if(reg.test(file.type)) ret.push(file[slice]());
     }
 
     return ret;
@@ -134,7 +137,7 @@ var Recorder = (function(R, win, doc) {
       var value = data[key];
 
       // data-uri to blob
-      if(value.slice(0, 10) === 'data:image') value = dataURItoBlob(value);
+      if(value.slice && (value.slice(0, 10) === 'data:image')) value = dataURItoBlob(value);
       formData.append(key, value);
     });
 
