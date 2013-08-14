@@ -73,7 +73,11 @@ var Recorder = (function(R, win, doc) {
       navigator[R._api.name](constraints, success, error);
   }
 
-  R.read = function(input, callback) {
+  /* 读取 input[type=file] 选中的文件
+   * @param input {HTML Element} input[type=file]
+   * @returns {Array} 返回是文件的二进制形式 Blob
+   */
+  R.read = function(input) {
 
     var ret = []
       , files = input.files

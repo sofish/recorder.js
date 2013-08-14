@@ -74,17 +74,28 @@
 
   }, false);
 
-  Recorder.read(input).forEach(function(file) {
-    var reader = new FileReader();
+  input.onchange = function() {
+      var files = Recorder.read(input);
 
-    reader.onload = function(e) {
-        var li = document.createElement('li')
-        li.innerHTML = '<img src="' + e.target.result + '" />';
-        imgs.appendChild(li);
-    }
+      files.forEach(function(file) {
+          var reader = new FileReader();
 
-    reader.readAsDataURL(file);
-  });
+          reader.onload = function(e) {
+              var li = document.createElement('li')
+              li.innerHTML = '<img src="' + e.target.result + '" />';
+              imgs.appendChild(li);
+          }
+
+          reader.readAsDataURL(file);
+
+          Recorder.upload('/test/image.php', {
+              name: 'sofish',
+              file: file
+          }, function(data) {
+              console.log(data);
+          });
+      });
+  }
 
 
 
