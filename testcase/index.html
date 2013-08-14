@@ -9,6 +9,7 @@
     img{display:block;margin:0 auto;}
     #wrapper{width:300px;margin:10px auto 0;}
     #snapshot{display:none;}
+    #imgs li img{max-width:200px;}
   </style>
 </head>
 <body>
@@ -20,6 +21,11 @@
       <button id="stop">stop</button>
       <button id="snapshot">snapshot</button>
     </p>
+
+    <input type="file" multiple accept="image/*" />
+
+    <ul id="imgs"></ul>
+
 </div>
 
 <script src="../recorder.js"></script>
@@ -28,7 +34,7 @@
 
   if(!Recorder.isSupported) return;
 
-  var Util = {}, video, snapshot, play;
+  var Util = {}, video, snapshot, play, stop, input, imgs;
 
   Util.get = function(selector, isList) {
     return isList ? doc.querySelectorAll(selector) : doc.querySelector(selector);
@@ -38,6 +44,8 @@
   snapshot = Util.get('#snapshot');
   play = Util.get('#play');
   stop = Util.get('#stop');
+  input = Util.get('input[type="file"]');
+  imgs = Util.get('#imgs');
 
   play.addEventListener('click', function(){
     Recorder.play(video, 'both', function() {
@@ -65,6 +73,21 @@
     });
 
   }, false);
+
+  Recorder.read(input).forEach(function(file) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+        var li = document.createElement('li')
+        li.innerHTML = '<img src="' + e.target.result + '" />';
+        imgs.appendChild(li);
+    }
+
+    reader.readAsDataURL(file);
+  });
+
+
+
 
 }(window, document)
 

@@ -1,6 +1,20 @@
 /*! licensed under MIT, https://github.com/sofish */
 var Recorder = (function(R, win, doc) {
 
+  // covert data-uri to blob
+  // copyright: http://stackoverflow.com/a/11954337
+  var dataURItoBlob = function(dataURI) {
+    var binary = atob(dataURI.split(',')[1]);
+    var array = [];
+    for(var i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+    }
+
+    return new Blob([new Uint8Array(array)], {
+      type: dataURI.slice(5, dataURI.indexOf(';'))
+    });
+  };
+
   // detect CaptureApi
   R._api = navigator.getUserMedia || navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -59,6 +73,19 @@ var Recorder = (function(R, win, doc) {
       navigator[R._api.name](constraints, success, error);
   }
 
+  R.read = function(input, callback) {
+
+    var ret = []
+      , files = input.files
+      , reg = /^image\/(jpeg|jpg|gif|png)$/
+
+    for(var i = 0; i < files.length; i++) {
+      if(reg.test(files[i].type)) ret.push(files[i].slice());
+    }
+
+    return ret;
+  }
+
   /* take picture
    * @param video {DOM Element} the video element
    * @param type {String} 'image/jpeg' by default
@@ -97,21 +124,6 @@ var Recorder = (function(R, win, doc) {
 
     var formData = new FormData()
       , xhr = new XMLHttpRequest()
-      , dataURItoBlob;
-
-    // covert data-uri to blob
-    // copyright: http://stackoverflow.com/a/11954337
-    dataURItoBlob = function(dataURI) {
-      var binary = atob(dataURI.split(',')[1]);
-      var array = [];
-      for(var i = 0; i < binary.length; i++) {
-        array.push(binary.charCodeAt(i));
-      }
-
-      return new Blob([new Uint8Array(array)], {
-        type: dataURI.slice(5, dataURI.indexOf(';'))
-      });
-    };
 
     // send data with `FormData` format
     Object.keys(data).forEach(function(key) {
