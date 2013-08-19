@@ -4,7 +4,7 @@ Using Capture API (HTML5) to capture video / photo via the camera of your device
 
 DEMO: baixing/fabu [使用摄像头传图](http://shanghai.sofish.baixing.cn/fabu/zhengzu#id_images)
 
-![screen shot 2013-08-19 at 2 28 52 pm](https://f.cloud.github.com/assets/153183/984365/0ff8431a-0899-11e3-8022-60a5df92480e.png)
+![demo image](https://f.cloud.github.com/assets/153183/984367/4167f0b2-0899-11e3-84aa-d5ea3e8c5e77.png)
 
 
 ```js
